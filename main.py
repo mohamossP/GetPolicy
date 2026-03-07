@@ -22,7 +22,15 @@ async def get_api_key(header_key: str = Security(api_key_header)):
 def get_policy_from_portal(citizen_id: str):
     # ... (Keep your same Playwright logic here) ...
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
+            ]
+        )
         page = browser.new_page()
         try:
             page.goto("https://portal1-0jeg.onrender.com/", timeout=60000)
